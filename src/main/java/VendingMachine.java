@@ -68,26 +68,22 @@ public class VendingMachine {
         }.execute();
     }
     
-    public boolean dispenseCandyAndCookie(final int candy, final int cookies) {
-        return new Atomic<Boolean>() {
-            public Boolean atomically() {
-                return dispenseCandy(candy) && dispenseCookie(cookies);
-            }
-        }.execute();
-    }
-    
     private void replenish() {
         new Atomic() {
             public Object atomically() {
                 long currentCandy = candyLevel.get();
                 long currentCookie = cookieLevel.get();
-                if(currentCandy < MAX_INVENTORY) candyLevel.set(MAX_INVENTORY);
-                if(currentCookie < MAX_INVENTORY) cookieLevel.set(MAX_INVENTORY);
+                if(currentCandy < MAX_INVENTORY) candyLevel.swap(MAX_INVENTORY);
+                if(currentCookie < MAX_INVENTORY) cookieLevel.swap(MAX_INVENTORY);
                 return null;
             }
         }.execute();
     }
     
+    public void stopVendingMachine() { keepRunning.swap(false); }
     
+    public int getCookiesAvailable() { return cookieLevel.get(); }
     
+    public int getCandyAvailable() { return candyLevel.get();  }
+
 }
