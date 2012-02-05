@@ -23,16 +23,16 @@ public class WillieWonka implements Callable<Object> {
 
 	public Object call() throws Exception {
 		int i = 0;
-		start.countDown();
-		start.await();
+
+		//start.await();
 		while (i < daysToRun) {
 			long timeToWait = getNextWaitTime();
 			Thread.sleep(timeToWait);
 			
 			if (vendingMachine.dispenseCandy(1))
-				System.out.println("        The Candy Man Can");
+				System.out.println("WillieWonka:\t The Candy Man Can");
 			else
-				System.out.println("        Violet - you're turning violet");
+				System.out.println("WillieWonka:\tViolet - you're turning violet");
 
 			i = timer.getDay();
 			// Wait for the rest of the day

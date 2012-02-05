@@ -12,12 +12,14 @@ public class Timer extends Thread {
 
 	@Override
 	public void run() {
-		try {
+		/*
+        try {
 			start.await();
 		} catch (InterruptedException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
+		*/
 		while(true){
 			try {
 				System.out.println("DAY ----------- " + day);
@@ -25,7 +27,10 @@ public class Timer extends Thread {
 				day++;
 		
 				
-			} catch (InterruptedException e){}
+			} catch (InterruptedException e){
+
+            }
+            if(this.isInterrupted()) break;
 			
 		}
 	}

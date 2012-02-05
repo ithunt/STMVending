@@ -11,7 +11,7 @@ import java.util.concurrent.Executors;
  */
 public class Main {
 	
-	public static int SECONDS_IN_A_DAY = 1;
+	public static int SECONDS_IN_A_DAY = 1000;
 	public static int DAYS_TO_RUN = 15;
     
     
@@ -20,7 +20,7 @@ public class Main {
     	
     	VendingMachine vm = VendingMachine.create();
     	
-    	CountDownLatch start = new CountDownLatch(3);
+    	CountDownLatch start = new CountDownLatch(1);
     	Timer timer = new Timer(start);
     	
     	
@@ -36,11 +36,14 @@ public class Main {
 
     	final ExecutorService service = Executors.newFixedThreadPool(10);
     	timer.start();
-    	
         service.invokeAll(tasks);
+
+
+        Thread.sleep(DAYS_TO_RUN * SECONDS_IN_A_DAY);
         
         vm.stopVendingMachine();
         service.shutdown();
+        timer.interrupt();
     	
     	
     	

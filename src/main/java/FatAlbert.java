@@ -26,18 +26,22 @@ public class FatAlbert implements Callable {
 
     public Object call() throws Exception {
         int i = 0;
-        start.countDown();
-        start.await();
+
+        //start.await();
         
         while( i <= daysToRun){
         	
-            if(vendingMachine.dispenseCandy(1) && vendingMachine.dispenseCookie(1))
-                System.out.println("            Hey, hey hey!");
-            else if(vendingMachine.dispenseCandy(1))
-            	System.out.println("           At least I got a Candy");
-            else if(vendingMachine.dispenseCookie(1))
-            	System.out.println("            At least I got a Cookie");
-            else System.out.println("            No food for me today");
+            final boolean candy = vendingMachine.dispenseCandy(1);
+            final boolean cookie = vendingMachine.dispenseCandy(1);
+
+            if(candy && cookie)
+                System.out.println("FatAlbert:\t\t Hey, hey hey!");
+            else if(candy)
+            	System.out.println("FatAlbert:\t\t At least I got a Candy");
+            else if(cookie)
+            	System.out.println("FatAlbert:\t\t At least I got a Cookie");
+            else System.out.println("FatAlbert:\t\t No food for me today");
+
             Thread.sleep(getNextWaitTime());
             i = timer.getDay();
 

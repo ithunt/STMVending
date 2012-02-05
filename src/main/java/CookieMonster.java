@@ -1,4 +1,3 @@
-import java.util.Random;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CountDownLatch;
 
@@ -23,16 +22,15 @@ public class CookieMonster implements Callable<Object> {
 
     public Object call() throws Exception {
     	int i = 0;
-    	
-    	start.countDown();
-    	start.await();
+
+    	//start.await();
         while(i <= daysToRun) {
         	
         	// He gets a cookie every half day.
         	
             if(vendingMachine.dispenseCookie(1))
-                System.out.println("    Me love cookies");
-            else System.out.println("    Me hungry");
+                System.out.println("CookieMonster:\t Me love cookies");
+            else System.out.println("CookieMonster:\t Me hungry");
             
             Thread.sleep(500);
             i = timer.getDay();
