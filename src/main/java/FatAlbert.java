@@ -1,4 +1,6 @@
 
+import akka.stm.Atomic;
+
 import java.util.Random;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CountDownLatch;
@@ -31,16 +33,22 @@ public class FatAlbert implements Callable {
         
         while(day < Main.DAYS_TO_RUN){
         	
-            final boolean candy = vendingMachine.dispenseCandy(1);
-            final boolean cookie = vendingMachine.dispenseCandy(1);
+            new Atomic<Boolean>() {
+                public Boolean atomically() {
+                    final boolean candy = vendingMachine.dispenseCandy(1, this.getClass());
+                    final boolean cookie = vendingMachine.dispenseCandy(1, this.getClass());
 
-            if(candy && cookie)
-                System.out.println("            Hey, hey hey!");
-            else if(candy)
-            	System.out.println("            At least I got a Candy");
-            else if(cookie)
-            	System.out.println("            At least I got a Cookie");
-            else System.out.println("            No food for me today");
+                    if(candy && cookie)
+                        System.out.println("            Hey, hey hey!");
+                    else if(candy)
+                        System.out.println("            At least I got a Candy");
+                    else if(cookie)
+                        System.out.println("            At least I got a Cookie");
+                    else System.out.println("            No food for me today");
+                    return (candy && cookie);
+                }
+            }.execute();
+
 
             Thread.sleep(getNextWaitTime());
             day = timer.getDay();

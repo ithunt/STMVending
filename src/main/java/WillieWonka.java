@@ -1,3 +1,5 @@
+import akka.stm.Atomic;
+
 import java.util.Random;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CountDownLatch;
@@ -26,10 +28,16 @@ public class WillieWonka implements Callable<Object> {
 			final long timeToWait = getNextWaitTime();
 			Thread.sleep(timeToWait);
 			
-			if (vendingMachine.dispenseCandy(1))
-				System.out.println("        The Candy Man Can");
-			else
-				System.out.println("        Violet - you're turning violet");
+            new Atomic<Boolean>() {
+                public Boolean atomically() {
+                    if (vendingMachine.dispenseCandy(1, this.getClass()))
+                        System.out.println("        The Candy Man Can");
+                    else
+                        System.out.println("        Violet - you're turning violet");
+                    return true;
+                }
+            }.execute();
+
 
 			day = timer.getDay();
 			// Wait for the rest of the day

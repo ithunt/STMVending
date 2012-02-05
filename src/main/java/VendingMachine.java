@@ -40,12 +40,14 @@ public class VendingMachine {
         return vendingMachine;
     }
 
-    public boolean dispenseCookie(final int num) {
+    public boolean dispenseCookie(final int num, final Class customer) {
         return new Atomic<Boolean>() {
             public Boolean atomically() {
                 int cookies = cookieLevel.get();
                 if(num > 0 && cookies >= num) {
                     cookieLevel.swap(cookies - num);
+                    System.out.println(customer.getName() + " dispensed " + num + " cookie(s). " +
+                            cookieLevel.get() + " remain.");
                     return true;
                 } else {
                     return false;
@@ -54,12 +56,14 @@ public class VendingMachine {
         }.execute();
     }
 
-    public boolean dispenseCandy(final int num) {
+    public boolean dispenseCandy(final int num, final Class customer) {
         return new Atomic<Boolean>() {
             public Boolean atomically() {
                 int candy = candyLevel.get();
                 if(num > 0 && candy >= num) {
                     candyLevel.swap(candy - num);
+                    System.out.println(customer.getName() + " dispensed " + num + " candybar(s). " +
+                        candyLevel.get() + " remain.");
                     return true;
                 } else {
                     return false;

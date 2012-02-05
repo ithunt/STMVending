@@ -1,3 +1,5 @@
+import akka.stm.Atomic;
+
 import java.util.concurrent.Callable;
 import java.util.concurrent.CountDownLatch;
 
@@ -27,9 +29,13 @@ public class CookieMonster implements Callable<Object> {
         	
         	// He gets a cookie every half day.
         	
-            if(vendingMachine.dispenseCookie(1))
-                System.out.println("    Me love cookies");
-            else System.out.println("    Me hungry");
+            new Atomic<Boolean>() {
+                public Boolean atomically() {
+                    if(vendingMachine.dispenseCookie(1, this.getClass())) System.out.println("    Me love cookies");
+                    else System.out.println("    Me hungry");
+                    return true;
+                }
+            }.execute();
             
             Thread.sleep(500);
             day = timer.getDay();
