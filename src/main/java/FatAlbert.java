@@ -36,7 +36,7 @@ public class FatAlbert implements Callable {
             new Atomic<Boolean>() {
                 public Boolean atomically() {
                     final boolean candy = vendingMachine.dispenseCandy(1, this.getClass());
-                    final boolean cookie = vendingMachine.dispenseCandy(1, this.getClass());
+                    final boolean cookie = vendingMachine.dispenseCookie(1, this.getClass());
 
                     if(candy && cookie)
                         System.out.println("            Hey, hey hey!");

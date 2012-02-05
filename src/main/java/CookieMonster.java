@@ -37,7 +37,7 @@ public class CookieMonster implements Callable<Object> {
                 }
             }.execute();
             
-            Thread.sleep(500);
+            Thread.sleep((long)(Main.SECONDS_IN_A_DAY * .5));
             day = timer.getDay();
 
         } return null;

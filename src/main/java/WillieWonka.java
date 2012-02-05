@@ -41,7 +41,7 @@ public class WillieWonka implements Callable<Object> {
 
 			day = timer.getDay();
 			// Wait for the rest of the day
-			Thread.sleep(1000 - timeToWait);
+			Thread.sleep(Main.SECONDS_IN_A_DAY - timeToWait);
 
 		}
 		return null;
@@ -60,7 +60,7 @@ public class WillieWonka implements Callable<Object> {
 		// He can wait between nothing to a full day before he goes to the
 		// vending machine.
 		final int minWait = 0;
-		final int maxWait = 1000;
+		final int maxWait = Main.SECONDS_IN_A_DAY;
 
 		final double random = new Random().nextDouble();
 		final double sleepyTime = minWait + (random * (maxWait - minWait));
