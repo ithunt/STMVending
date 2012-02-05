@@ -2,6 +2,13 @@ import akka.stm.Ref;
 
 import java.util.concurrent.CountDownLatch;
 
+/**
+ * Timer class that keeps track on what day it is.
+ * 
+ * @author christoffer rosen
+ * @author ian hunt
+ *
+ */
 
 public class Timer extends Thread {
 	

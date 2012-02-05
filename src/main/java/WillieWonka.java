@@ -5,7 +5,11 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.CountDownLatch;
 
 /**
+ * Willie Wonka, who goes to the candy machine at some point everyday
+ * and tries to get one candy bar. 
+ * 
  * @author ian hunt
+ * @author christoffer rosen
  * @date 1/30/12
  */
 public class WillieWonka implements Callable<Object> {

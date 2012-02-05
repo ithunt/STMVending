@@ -6,7 +6,10 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
+ * Main class, which will start the simulation that will run for 1/2 a month.
+ * 
  * @author ian hunt
+ * @author christoffer rosen
  * @date 1/30/12
  */
 public class Main {
@@ -38,13 +41,10 @@ public class Main {
     	timer.start();
         service.invokeAll(tasks);
 
-
-        Thread.sleep(DAYS_TO_RUN * SECONDS_IN_A_DAY);
         
         vm.stopVendingMachine();
         service.shutdown();
         timer.interrupt();
-    	System.out.println("done-------------------------------->");
     	System.exit(0);
 
     	

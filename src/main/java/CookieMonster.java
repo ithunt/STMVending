@@ -4,7 +4,11 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.CountDownLatch;
 
 /**
+ * Cookie Monster, who goes to the vending machine twice a day at 
+ * even intervals. Tries to get a cookie.
+ * 
  * @author ian hunt
+ * @author christoffer rosen
  * @date 1/30/12
  */
 public class CookieMonster implements Callable<Object> {

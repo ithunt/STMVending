@@ -5,8 +5,10 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.CountDownLatch;
 
 /**
+ * Fat Albert. He likes to have both a cookie and a candy bar 2-4 times a day at 
+ * random intervals.
  * 
- * @author christofferrosen
+ * @author christoffer rosen
  * @author ian hunt
  *
  */

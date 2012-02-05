@@ -6,6 +6,10 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 /**
+ * Vending machince that holds Cookies and Candy.
+ * Customers can request either one of these items, or both.
+ * Does not accept payment. 
+ * 
  * @author ian hunt
  * @date 1/30/12
  */
