@@ -1,4 +1,6 @@
+import java.util.Random;
 import java.util.concurrent.Callable;
+import java.util.concurrent.CountDownLatch;
 
 /**
  * @author ian hunt
@@ -6,28 +8,58 @@ import java.util.concurrent.Callable;
  */
 public class WillieWonka implements Callable<Object> {
 
-    private final VendingMachine vendingMachine;
+	private final VendingMachine vendingMachine;
+	private final Timer timer;
+	private final int daysToRun;
+	private final CountDownLatch start;
 
+	public WillieWonka(final VendingMachine vendingMachine, Timer timer,
+			int daysToRun, CountDownLatch start) {
+		this.vendingMachine = vendingMachine;
+		this.timer = timer;
+		this.daysToRun = daysToRun;
+		this.start = start;
+	}
 
-    
-    public WillieWonka(final VendingMachine vendingMachine) {
-        this.vendingMachine = vendingMachine;
-        //dayIndex = -1;
-    }
+	public Object call() throws Exception {
+		int i = 0;
+		start.countDown();
+		start.await();
+		while (i < daysToRun) {
+			long timeToWait = getNextWaitTime();
+			Thread.sleep(timeToWait);
+			
+			if (vendingMachine.dispenseCandy(1))
+				System.out.println("        The Candy Man Can");
+			else
+				System.out.println("        Violet - you're turning violet");
 
-    public Object call() throws Exception {
-        while(true) {
-            if(vendingMachine.dispenseCookie(1))
-                System.out.println("Me love cookies");
-            else System.out.println("Me hungry");
-            this.wait(500);
+			i = timer.getDay();
+			// Wait for the rest of the day
+			Thread.sleep(1000 - timeToWait);
 
-        }
+		}
+		return null;
 
-    }
-    
-    private long getNextWaitTime(long ) {
+	}
 
-        //(dayIndex * 1000) + (long)(Math.random() * 1000);
-    }
+	/**
+	 * Willie Wonka likes to have 1 candy bar each day at some point during the
+	 * day.
+	 * 
+	 * @return The amount of wait time in milliseconds thread must sleep until
+	 *         WW tries to get another cookie and candy.
+	 */
+	private long getNextWaitTime() {
+
+		// He can wait between nothing to a full day before he goes to the
+		// vending machine.
+		int minWait = 0;
+		int maxWait = 1000;
+
+		double random = new Random().nextDouble();
+		double sleepyTime = minWait + (random * (maxWait - minWait));
+		return ((long) sleepyTime);
+
+	}
 }
