@@ -10,31 +10,28 @@ public class WillieWonka implements Callable<Object> {
 
 	private final VendingMachine vendingMachine;
 	private final Timer timer;
-	private final int daysToRun;
 	private final CountDownLatch start;
 
-	public WillieWonka(final VendingMachine vendingMachine, Timer timer,
-			int daysToRun, CountDownLatch start) {
+	public WillieWonka(final VendingMachine vendingMachine, Timer timer, CountDownLatch start) {
 		this.vendingMachine = vendingMachine;
 		this.timer = timer;
-		this.daysToRun = daysToRun;
 		this.start = start;
 	}
 
 	public Object call() throws Exception {
-		int i = 0;
-
-		//start.await();
-		while (i < daysToRun) {
-			long timeToWait = getNextWaitTime();
+		int day = timer.getDay();
+        start.countDown();
+		start.await();
+		while (day < Main.DAYS_TO_RUN) {
+			final long timeToWait = getNextWaitTime();
 			Thread.sleep(timeToWait);
 			
 			if (vendingMachine.dispenseCandy(1))
-				System.out.println("WillieWonka:\t The Candy Man Can");
+				System.out.println("        The Candy Man Can");
 			else
-				System.out.println("WillieWonka:\tViolet - you're turning violet");
+				System.out.println("        Violet - you're turning violet");
 
-			i = timer.getDay();
+			day = timer.getDay();
 			// Wait for the rest of the day
 			Thread.sleep(1000 - timeToWait);
 
@@ -54,11 +51,11 @@ public class WillieWonka implements Callable<Object> {
 
 		// He can wait between nothing to a full day before he goes to the
 		// vending machine.
-		int minWait = 0;
-		int maxWait = 1000;
+		final int minWait = 0;
+		final int maxWait = 1000;
 
-		double random = new Random().nextDouble();
-		double sleepyTime = minWait + (random * (maxWait - minWait));
+		final double random = new Random().nextDouble();
+		final double sleepyTime = minWait + (random * (maxWait - minWait));
 		return ((long) sleepyTime);
 
 	}

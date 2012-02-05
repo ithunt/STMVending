@@ -6,44 +6,44 @@ import java.util.concurrent.CountDownLatch;
 /**
  * 
  * @author christofferrosen
+ * @author ian hunt
  *
  */
 public class FatAlbert implements Callable {
 	
 	private final VendingMachine vendingMachine;
 	private final Timer timer;
-	private final int daysToRun;
 	private final CountDownLatch start;
 
-    public FatAlbert(final VendingMachine vendingMachine, Timer timer, int daysToRun,
+    public FatAlbert(final VendingMachine vendingMachine, Timer timer,
     		CountDownLatch start) {
         this.vendingMachine = vendingMachine;
         this.timer = timer;
-        this.daysToRun = daysToRun;
         this.start = start;
        
     }
 
     public Object call() throws Exception {
-        int i = 0;
+        int day = timer.getDay();
 
-        //start.await();
+        start.countDown();
+        start.await();
         
-        while( i <= daysToRun){
+        while(day < Main.DAYS_TO_RUN){
         	
             final boolean candy = vendingMachine.dispenseCandy(1);
             final boolean cookie = vendingMachine.dispenseCandy(1);
 
             if(candy && cookie)
-                System.out.println("FatAlbert:\t\t Hey, hey hey!");
+                System.out.println("            Hey, hey hey!");
             else if(candy)
-            	System.out.println("FatAlbert:\t\t At least I got a Candy");
+            	System.out.println("            At least I got a Candy");
             else if(cookie)
-            	System.out.println("FatAlbert:\t\t At least I got a Cookie");
-            else System.out.println("FatAlbert:\t\t No food for me today");
+            	System.out.println("            At least I got a Cookie");
+            else System.out.println("            No food for me today");
 
             Thread.sleep(getNextWaitTime());
-            i = timer.getDay();
+            day = timer.getDay();
 
         } return null;
 

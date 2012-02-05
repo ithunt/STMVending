@@ -8,32 +8,31 @@ import java.util.concurrent.CountDownLatch;
 public class CookieMonster implements Callable<Object> {
 
     private final VendingMachine vendingMachine;
-    private final int daysToRun;
     private final Timer timer;
     private final CountDownLatch start;
 
-    public CookieMonster(final VendingMachine vendingMachine, Timer timer, int daysToRun,
+    public CookieMonster(final VendingMachine vendingMachine, Timer timer,
     		CountDownLatch start) {
         this.vendingMachine = vendingMachine;
-        this.daysToRun = daysToRun;
         this.timer = timer;
         this.start = start;
     }
 
     public Object call() throws Exception {
-    	int i = 0;
+    	int day = timer.getDay();
 
-    	//start.await();
-        while(i <= daysToRun) {
+        start.countDown();
+    	start.await();
+        while(day < Main.DAYS_TO_RUN) {
         	
         	// He gets a cookie every half day.
         	
             if(vendingMachine.dispenseCookie(1))
-                System.out.println("CookieMonster:\t Me love cookies");
-            else System.out.println("CookieMonster:\t Me hungry");
+                System.out.println("    Me love cookies");
+            else System.out.println("    Me hungry");
             
             Thread.sleep(500);
-            i = timer.getDay();
+            day = timer.getDay();
 
         } return null;
 

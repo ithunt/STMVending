@@ -71,10 +71,11 @@ public class VendingMachine {
     private void replenish() {
         new Atomic() {
             public Object atomically() {
-                long currentCandy = candyLevel.get();
-                long currentCookie = cookieLevel.get();
+                final long currentCandy = candyLevel.get();
+                final long currentCookie = cookieLevel.get();
                 if(currentCandy < MAX_INVENTORY) candyLevel.swap(MAX_INVENTORY);
                 if(currentCookie < MAX_INVENTORY) cookieLevel.swap(MAX_INVENTORY);
+                System.out.println("CurrentCandy: " + currentCandy + " - CurrentCookies: " + currentCookie + " - Replenished To: " + MAX_INVENTORY);
                 return null;
             }
         }.execute();

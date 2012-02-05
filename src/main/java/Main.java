@@ -11,8 +11,8 @@ import java.util.concurrent.Executors;
  */
 public class Main {
 	
-	public static int SECONDS_IN_A_DAY = 1000;
-	public static int DAYS_TO_RUN = 15;
+	public static final int SECONDS_IN_A_DAY = 1000;
+	public static final int DAYS_TO_RUN = 15;
     
     
     public static void main(String[] args) throws InterruptedException {
@@ -20,13 +20,13 @@ public class Main {
     	
     	VendingMachine vm = VendingMachine.create();
     	
-    	CountDownLatch start = new CountDownLatch(1);
+    	CountDownLatch start = new CountDownLatch(3);
     	Timer timer = new Timer(start);
     	
     	
-    	WillieWonka ww = new WillieWonka(vm, timer, DAYS_TO_RUN, start);
-    	FatAlbert fa = new FatAlbert(vm, timer, DAYS_TO_RUN, start);
-    	CookieMonster cm = new CookieMonster(vm, timer, DAYS_TO_RUN, start);
+    	WillieWonka ww = new WillieWonka(vm, timer, start);
+    	FatAlbert fa = new FatAlbert(vm, timer, start);
+    	CookieMonster cm = new CookieMonster(vm, timer, start);
     	
     	
     	List<Callable<Object>> tasks = new ArrayList<Callable<Object>>();   
@@ -44,11 +44,6 @@ public class Main {
         vm.stopVendingMachine();
         service.shutdown();
         timer.interrupt();
-    	
-    	
-    	
-    	
-    	
     	System.out.println("done-------------------------------->");
     	System.exit(0);
 
