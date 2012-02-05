@@ -55,7 +55,7 @@ public class WillieWonka implements Callable<Object> {
 	 * @return The amount of wait time in milliseconds thread must sleep until
 	 *         WW tries to get another cookie and candy.
 	 */
-	private long getNextWaitTime() {
+	private static long getNextWaitTime() {
 
 		// He can wait between nothing to a full day before he goes to the
 		// vending machine.

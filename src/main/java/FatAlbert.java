@@ -1,7 +1,6 @@
 
 import akka.stm.Atomic;
 
-import java.util.Random;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CountDownLatch;
 
@@ -16,6 +15,9 @@ public class FatAlbert implements Callable {
 	private final VendingMachine vendingMachine;
 	private final Timer timer;
 	private final CountDownLatch start;
+    
+    private int requestsToday;
+    private int lastDay;
 
     public FatAlbert(final VendingMachine vendingMachine, Timer timer,
     		CountDownLatch start) {
@@ -30,6 +32,7 @@ public class FatAlbert implements Callable {
 
         start.countDown();
         start.await();
+        final long startTime = System.currentTimeMillis();
         
         while(day < Main.DAYS_TO_RUN){
         	
@@ -50,7 +53,7 @@ public class FatAlbert implements Callable {
             }.execute();
 
 
-            Thread.sleep(getNextWaitTime());
+            Thread.sleep(getNextWaitTime(startTime, day));
             day = timer.getDay();
 
         } return null;
@@ -63,25 +66,27 @@ public class FatAlbert implements Callable {
      * @return	The amount of wait time in milliseconds thread must sleep until FA tries to get another
      * cookie and candy.
      */
-    private long getNextWaitTime() {
-    	
-    	
-    	// Random interval greater than 1/4 of a day (as he can go as many times as 4 a day)
-    	// and smaller than 1/2 a day (as he can go at least twice a day)
-    	
-    	int minWait = 249;
-    	int maxWait = 501;
-    	
-    	double random = new Random().nextDouble();
-    	double sleepyTime = minWait + (random * (maxWait - minWait));
-    	
-    	
-    	return (long) sleepyTime;
-										    	
-    	
-    	
-
+    private long getNextWaitTime(final long startTime, int day) {
         
+        if(day != lastDay) {
+            requestsToday = 0;
+            lastDay = day;
+        }
+        final long millisRemaining = (((day+2) * Main.SECONDS_IN_A_DAY)
+                - (System.currentTimeMillis() - startTime));
+        
+        //if max requests, wait till beginning of next day
+        if(requestsToday > 3) return millisRemaining;
+        else {
+            requestsToday++;
+            if(requestsToday < 2) {
+                return (long)(Math.random() * millisRemaining * .5);
+            } else {
+                return (long)(Math.random() * millisRemaining);
+            }
+
+        }
+
     }
 }
 
